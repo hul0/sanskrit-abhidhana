@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanskrit Abhidhana - Lexicon & REST API System</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <div class="brand-logo">अ</div>
+        <div class="brand-title">Sanskrit Abhidhana</div>
+      </a>
+      <div class="nav-links">
+        <!-- Saffron Theme Switcher -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Saffron Light / Dark Theme">
+          <span id="theme-toggle-icon">🌙</span>
+          <span id="theme-toggle-label">Saffron Dark</span>
+        </button>
+
+        <a href="/docs" target="_blank" class="nav-btn nav-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 2 0 0 0-2 2v16a2 2 2 0 0 0 2 2h12a2 2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          Swagger Docs
+        </a>
+        <a href="/redoc" target="_blank" class="nav-btn">ReDoc</a>
+        <a href="/metrics" target="_blank" class="nav-btn">Metrics</a>
+        <a href="/health" target="_blank" class="nav-btn">Health</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero Title -->
+    <div class="hero">
+      <h1 class="hero-title">संस्कृत अभिधानम्</h1>
+      <p class="hero-subtitle">High-throughput Sanskrit Lexicon REST API system powered by Monier-Williams database and multi-script transliteration engine.</p>
+    </div>
+
+    <!-- Live Telemetry Bar -->
+    <div class="telemetry-bar">
+      <div class="badge">
+        <div class="badge-dot"></div>
+        API: <span id="telemetry-status">Online</span>
+      </div>
+      <div class="badge">
+        Database: <span>286,525 Entries</span>
+      </div>
+      <div class="badge">
+        Latency: <span id="telemetry-latency">-- ms</span>
+      </div>
+      <div class="badge">
+        RAM RSS: <span id="telemetry-ram">-- MB / 300 MB</span>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-card">
+      <div class="search-mode-tabs">
+        <button class="tab-btn active" onclick="setSearchMode('headword', this)">Sanskrit Headword Search</button>
+        <button class="tab-btn" onclick="setSearchMode('english', this)">English Full-Text Search</button>
+        <button class="tab-btn" onclick="setSearchMode('transliterate', this)">Transliterate Tool</button>
+      </div>
+
+      <div style="position: relative;">
+        <div class="search-input-wrapper">
+          <input type="text" id="search-input" class="search-input" placeholder="Type Sanskrit word in Devanagari, IAST, or loose English (e.g. krishna, dharma)..." autocomplete="off">
+          <button class="search-submit-btn" onclick="performSearch()" title="Search">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </button>
+        </div>
+
+        <!-- Autocomplete Dropdown -->
+        <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
+      </div>
+
+      <!-- Quick Samples -->
+      <div class="samples">
+        <span class="sample-label">Try searching:</span>
+        <button class="sample-chip" onclick="quickSearch('krishna')">krishna (loose)</button>
+        <button class="sample-chip" onclick="quickSearch('kṛṣṇa')">kṛṣṇa (IAST)</button>
+        <button class="sample-chip" onclick="quickSearch('कृष्ण')">कृष्ण (Devanagari)</button>
+        <button class="sample-chip" onclick="quickSearch('dharma')">dharma</button>
+        <button class="sample-chip" onclick="quickSearch('shiva')">shiva</button>
+        <button class="sample-chip" onclick="quickSearch('liberation', 'english')">liberation (English FTS)</button>
+        <button class="sample-chip" onclick="quickSearch('knowledge', 'english')">knowledge (English FTS)</button>
+      </div>
+
+      <!-- Live Transliteration Preview -->
+      <div id="trans-preview" class="transliteration-preview">
+        Live Conversion: IAST: <span id="prev-iast">--</span> | Devanagari: <span id="prev-dev">--</span>
+      </div>
+    </div>
+
+    <!-- Spinner -->
+    <div id="spinner" class="spinner-box">
+      <div class="spinner"></div>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Searching Monier-Williams database...</p>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-container">
+      <div class="results-meta">
+        <div id="results-count" class="results-count">Results will appear here</div>
+      </div>
+      <div id="results-list" class="results-list">
+        <div class="empty-state">
+          Enter a Sanskrit word or English term above to search 286,525 dictionary entries.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Sanskrit Abhidhana REST API System &bull; Fast, Memory-Efficient (&lt;300MB) Lexicon Architecture</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
