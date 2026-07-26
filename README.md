@@ -68,6 +68,15 @@ Engineered for extreme performance, it provides sub-millisecond headword lookups
 
 ## Quick Start
 
+### 0. Prerequisites Check
+
+Ensure that you have the following prerequisites installed:
+
+```bash
+python3 --version
+uv --version
+```
+
 ### 1. Installation
 
 Clone the repository and install dependencies using `uv` or `pip`:
@@ -77,6 +86,10 @@ git clone https://github.com/hul0/sanskrit-abhidhana.git
 cd sanskrit-abhidhana
 uv pip install -r requirements.txt
 ```
+
+Download the Monier-Williams Sanskrit-English Dictionary SQLite database from the Cologne Sanskrit Lexicon project: [Download Latest MW Zip](https://github.com/sanskrit-lexicon/csl-sqlite/releases/)
+
+Then extract it into the `./data/mw/` directory so that the file path is `./data/mw/mw.sqlite`
 
 ### 2. Build Database Indices
 
