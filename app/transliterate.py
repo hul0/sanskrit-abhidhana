@@ -70,7 +70,7 @@ def detect_script(text: str) -> str:
         return 'tamil'
     if re.search(r'[āīūṛṝḷḹṃḥṅñṭḍṇśṣ]', text):
         return 'iast'
-    if re.search(r'R\^i|RR\^i|l\^i|\.m|\.h|Sh|sh', text):
+    if re.search(r'R\^i|RR\^i|l\^i|\.m|\.h|Sh', text):
         return 'itrans'
     if re.search(r'[wWqQRSzMHFxX]', text):
         return 'slp1'

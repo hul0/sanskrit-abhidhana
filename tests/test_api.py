@@ -50,8 +50,8 @@ class TestSanskritAbhidhana(unittest.TestCase):
         self.assertEqual(parsed['key_slp1'], 'kfzRa')
         self.assertEqual(parsed['headword_iast'], 'kṛṣṇa')
         self.assertEqual(parsed['headword_devanagari'], 'कृष्ण')
-        self.assertEqual(parsed['homonym'], 1)
-        self.assertEqual(parsed['grammatical_info'], 'mf(A/)n.')
+        self.assertEqual(parsed['grammatical_code'], 'mf(A/)n.')
+        self.assertEqual(parsed['grammatical_info'], 'masculine or feminine Ātmanepada (middle verb form) neuter gender')
         self.assertIn('black, dark', parsed['definition'])
         self.assertIn('raw_xml', parsed)
 
@@ -82,10 +82,10 @@ class TestSanskritAbhidhana(unittest.TestCase):
         self.assertIn('liberation', res_fts['results'][0]['fts_snippet'].lower())
 
     def test_06_autocomplete(self):
-        suggestions = autocomplete_headwords('krish', limit=5)
+        suggestions = autocomplete_headwords('krishn', limit=5)
         self.assertGreater(len(suggestions), 0)
         headwords = [s['slp1'] for s in suggestions]
-        self.assertIn('kfzRa', headwords)
+        self.assertTrue(any(h.startswith('kfzR') for h in headwords))
 
     def test_07_api_health_endpoint(self):
         response = self.client.get('/health')

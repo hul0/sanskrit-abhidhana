@@ -26,8 +26,16 @@ from app.transliterate import convert_script, detect_script, to_slp1_key, slp1_t
 
 app = FastAPI(
     title="Sanskrit Abhidhana REST API",
-    description="High-performance, low-memory (<300MB RAM) Sanskrit Lexicon & Dictionary REST API.",
+    description=(
+        "High-performance, low-memory (<300MB RAM) Sanskrit Lexicon & Dictionary REST API. "
+        "Created by Rupam Ghosh (hul0). Database attribution: Cologne Sanskrit Lexicon (csl-sqlite)."
+    ),
     version="1.0.0",
+    contact={
+        "name": "Rupam Ghosh",
+        "url": "https://github.com/hul0",
+        "email": "hulo@crine.in",
+    },
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -73,6 +81,8 @@ async def root():
         return FileResponse(index_path)
     return {
         "system": "Sanskrit Abhidhana REST API",
+        "author": "Rupam Ghosh (hul0 <hulo@crine.in>)",
+        "attribution": "Cologne Sanskrit Lexicon (csl-sqlite: https://github.com/sanskrit-lexicon/csl-sqlite)",
         "status": "online",
         "documentation": "/docs",
         "endpoints": {

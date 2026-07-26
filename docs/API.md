@@ -2,6 +2,9 @@
 
 Sanskrit Abhidhana provides a high-throughput, low-latency (<5ms) REST API for searching Monier-Williams Sanskrit dictionary entries (286,525 headwords), performing full-text English definition searches, and transliterating across 15+ Indic and Roman schemes.
 
+**Author**: Rupam Ghosh ([@hul0](https://github.com/hul0) | [hulo@crine.in](mailto:hulo@crine.in))  
+**Database Attribution**: [Cologne Sanskrit Lexicon (csl-sqlite)](https://github.com/sanskrit-lexicon/csl-sqlite)
+
 ---
 
 ## Base URL
